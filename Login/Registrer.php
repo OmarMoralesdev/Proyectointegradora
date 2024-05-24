@@ -51,18 +51,26 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 }
 
+
 $conn->close();
 ?>
 
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <title>Registrar</title>
-</head>
-<body>
-    <h2>Registrar</h2>
-    <?php
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://getbootstrap.com/docs/5.3/assets/css/docs.css" rel="stylesheet">
+    <title>Bootstrap Example</title>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  </head>
+  <body class="p-3 m-0 border-0 bd-example m-0 border-0">
+
+    <!-- Example Code -->
+    
+            <form method="post" action="">
+            <?php
     if (!empty($error)) {
         echo '<p style="color: red;">' . $error . '</p>';
     }
@@ -70,14 +78,35 @@ $conn->close();
         echo '<p style="color: green;">' . $success . '</p>';
     }
     ?>
-    <form method="post" action="">
-        Nombre: <input type="text" name="nombre" required><br>
-        Apellido Paterno: <input type="text" name="apellidopaterno" required><br>
-        Apellido Materno: <input type="text" name="apellidomaterno" required><br>
-        Correo: <input type="email" name="correo" required><br>
-        Contraseña: <input type="password" name="password" required><br>
-        Confirmar Contraseña: <input type="password" name="confirm_password" required><br>
-        <input type="submit" value="Registrar">
+            <div class="mb-3">
+        <label for="exampleInputEmail1" class="form-label">Nombre completo</label>
+        <input name="nombre" class="form-control">
+<br>
+        <div class="input-group">
+        <span class="input-group-text">Apellidos</span>
+        <input type="text" name="apellidopaterno" placeholder="paterno" aria-label="First name" class="form-control">
+        <input type="text" name="apellidomaterno" placeholder="materno" aria-label="Last name" class="form-control">
+      </div>
+      <br>
+      
+        <div class="mb-3">
+        <label for="exampleInputEmail1" class="form-label">Correo electronico</label>
+        <input type="email" name="correo" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+      
+      </div>
+      <div class="mb-3">
+        <label for="exampleInputPassword1" class="form-label">Contraseña</label>
+        <input type="password"  name="password" placeholder="Mínimo 8 digtos" class="form-control" id="exampleInputPassword1">
+      </div>
+
+    </div>
+    <div class="mb-3">
+      <label for="exampleInputPassword1" class="form-label">Confirmar contraseña</label>
+      <input type="password"  name="confirm_password" class="form-control" id="exampleInputPassword1">
+    </div>
+    <center>
+      <button type="submit" class="btn btn-primary" value="Registrar">Confirmar</button>
     </form>
-</body>
-</html>
+  </center>
+
+  
