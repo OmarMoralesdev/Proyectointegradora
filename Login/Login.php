@@ -129,7 +129,7 @@ $conn->close();
                 <button type="submit" class="my-form__button">Iniciar sesión</button>
                 <div class="my-form__actions">
                     <a href="#" title="Restablecer contraseña">Restablecer contraseña</a>
-                    <a href="#" title="Crear cuenta">¿Ya tienes una cuenta?</a>
+                    <a href="Registrer.php" title="Crear cuenta">¿Ya tienes una cuenta?</a>
                 </div>
             </form>
         </div>
