@@ -1,21 +1,30 @@
 <?php
-// Include database connection
+// Incluir conexión a la base de datos
 require 'conexion.php';
 
-// Initialize error variable
+// Inicializar variable de error
 $error = '';
 
+// Habilitar la visualización de errores para depuración
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    // Collect form data
+    // Recoger datos del formulario
     $correo = trim($_POST['correo']);
     $password = $_POST['password'];
 
-    // Basic validations
+    // Validaciones básicas
     if (empty($correo) || empty($password)) {
         $error = "Todos los campos son obligatorios.";
     } else {
-        // Prepare and execute query
+        // Preparar y ejecutar la consulta
         $stmt = $conn->prepare("SELECT idusuario, contraseña, roles FROM USUARIOS WHERE correo = ?");
+        if ($stmt === false) {
+            die('Error en la preparación de la consulta: ' . htmlspecialchars($conn->error));
+        }
+
         $stmt->bind_param("s", $correo);
         $stmt->execute();
         $stmt->store_result();
@@ -24,15 +33,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $stmt->bind_result($idusuario, $hashed_password, $role);
             $stmt->fetch();
 
-            // Verify password
+            // Verificar contraseña
             if (password_verify($password, $hashed_password)) {
-                // Start user session
+                // Iniciar sesión del usuario
                 session_start();
                 $_SESSION['idusuario'] = $idusuario;
                 $_SESSION['correo'] = $correo;
                 $_SESSION['role'] = $role;
 
-                // Redirect based on user role
+                // Redirigir según el rol del usuario
                 if ($role === 'usuario') {
                     header("Location: Alumno_dashboard.php");
                     exit();
@@ -71,7 +80,7 @@ $conn->close();
             <a href="#" title="Logo">
                 <img src="assets/ofin.png" class='logo' alt="Ofin">
             </a>
-            <form class="my-form" method="post" action="">
+            <form class="my-form" method="post" action="login.php">
                 <?php if (!empty($error)): ?>
                     <p style="color: red;"><?php echo $error; ?></p>
                 <?php endif; ?>
@@ -104,8 +113,7 @@ $conn->close();
                             type="password"
                             name="password"
                             placeholder="Tu contraseña"
-                            title="Mínimo 6 caracteres con al menos 1 letra y 1 número"
-                            pattern="^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{6,}$"
+                        
                             required
                         >
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" 
@@ -129,6 +137,5 @@ $conn->close();
             <img src="assets/mock.png" alt="Mock" class="mockup">
         </div>
     </div>
-    <script src="script.js"></script>
 </body>
 </html>
