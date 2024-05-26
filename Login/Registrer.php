@@ -2,7 +2,7 @@
 // Datos de conexión a la base de datos
 require 'conexion.php';
 
-// Inicializar variables de error y exit
+// Inicializaar variables de error y exit
 $error = '';
 $success = '';
 
