@@ -2,7 +2,7 @@
 // Datos de conexión a la base de datos
 require 'conexion.php';
 
-// Inicializar variables de error y éxito
+// Inicializar variables de error y exit
 $error = '';
 $success = '';
 
@@ -145,11 +145,13 @@ $conn->close();
                     <input type="password" name="confirm_password" class="form-control" id="confirm_password" required>
                 </div>
                 <center>
+
     <div style="display: flex; justify-content: center;">
         <a class="btn btn-primary" href="Login.php">Regresar</a>
         <div style="flex: 0 1 70%"></div> 
         <button type="submit" class="btn btn-primary">Confirmar</button>
     </div>
+
 </center>
             </form>
         </div>
