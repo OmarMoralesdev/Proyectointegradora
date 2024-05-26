@@ -77,15 +77,14 @@ $conn->close();
 <body>
     <div class="form-wrapper">
         <div class="form-side">
-            <a href="#" title="Logo">
-                <img src="assets/ofin.png" class='logo' alt="Ofin">
-            </a>
-            <form class="my-form" method="post" action="login.php">
+     <!--           <img src="assets/ofin.png" class='logo' alt="Ofin"> --> 
+    </a> 
+    <form class="my-form" method="post" action="login.php">
                 <?php if (!empty($error)): ?>
                     <p style="color: red;"><?php echo $error; ?></p>
                 <?php endif; ?>
                 <div class="form-welcome-row">
-                    <h1>Inicia sesión &#x1F44F;</h1>
+                    <h1>Inicia sesión &#128520;</h1>
                 </div>
                 <div class="text-field">
                     <label for="correo">Correo Electrónico:
@@ -94,11 +93,11 @@ $conn->close();
                             id="correo"
                             name="correo"
                             autocomplete="off"
-                            placeholder="Tu correo electrónico"
+                            placeholder="Correo electrónico"
                             required
                         >
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" 
-                            viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" 
+                            viewBox="0 0 24 24" stroke-width="1" stroke="currentColor" 
                             fill="none" stroke-linecap="round" stroke-linejoin="round">
                             <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
                             <path d="M12 12m-4 0a4 4 0 1 0 8 0a4 4 0 1 0 -8 0"></path>
@@ -112,12 +111,11 @@ $conn->close();
                             id="password"
                             type="password"
                             name="password"
-                            placeholder="Tu contraseña"
-                        
-                            required
-                        >
+                            placeholder="Contraseña"                        
+                            required>
+
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" 
-                            viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" 
+                            viewBox="0 0 24 24" stroke-width="1" stroke="currentColor" 
                             fill="none" stroke-linecap="round" stroke-linejoin="round">
                             <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
                             <path d="M5 13a2 2 0 0 1 2 -2h10a2 2 0 0 1 2 2v6a2 2 0 0 1 -2 2h-10a2 2 0 0 1 -2 -2v-6z"></path>
@@ -134,7 +132,7 @@ $conn->close();
             </form>
         </div>
         <div class="info-side">
-            <img src="assets/mock.png" alt="Mock" class="mockup">
+           <!-- <img src="assets/mock.png" alt="Mock" class="mockup"> -->
         </div>
     </div>
 </body>
