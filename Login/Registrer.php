@@ -69,7 +69,7 @@ $conn->close();
         }
         .form-container {
             max-width: 550px; /* Limitar el ancho máximo del formulario */
-            margin: auto; /* Centrar el formulario horizontalmente */
+            margin: auto; /* Centrarr el formulario horizontalmente */
             padding: 20px;
             background-color: white;
             border-radius: 20px;
