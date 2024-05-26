@@ -4,7 +4,7 @@ require 'conexion.php';
 
 // Inicializar variables de error y éxito
 $error = '';
-$success = '';
+$success = false;
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Recoger datos del formulario
@@ -25,7 +25,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $error = "Las contraseñas no coinciden.";
     } else {
         // Verificar si el correo ya existe
-  
         $stmt = $conn->prepare("SELECT idusuario FROM USUARIOS WHERE correo = ?");
         $stmt->bind_param("s", $correo);
         $stmt->execute();
@@ -35,7 +34,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $error = "El correo ya está registrado.";
         } else {
             // Hashear la contraseña
-            //xx
             $hashed_password = password_hash($password, PASSWORD_DEFAULT);
             
             // Insertar nuevo usuario
@@ -43,7 +41,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $stmt->bind_param("ssssss", $nombre, $apellidopaterno, $apellidomaterno, $role, $correo, $hashed_password);
             
             if ($stmt->execute()) {
-                $success = "Registro exitoso! Ahora puedes iniciar sesión.";
+                $success = true;
             } else {
                 $error = "Error al registrar el usuario: " . $stmt->error;
             }
@@ -52,7 +50,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $stmt->close();
     }
 }
-
 
 $conn->close();
 ?>
@@ -68,47 +65,88 @@ $conn->close();
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
   </head>
   <body class="p-3 m-0 border-0 bd-example m-0 border-0">
-
-    <!-- Example Code -->
-    
-            <form method="post" action="">
-            <?php
-    if (!empty($error)) {
-        echo '<p style="color: red;">' . $error . '</p>';
-    }
-    if (!empty($success)) {
-        echo '<p style="color: green;">' . $success . '</p>';
-    }
-    ?>
-            <div class="mb-3">
+    <!-- Formulario de registro -->
+    <form method="post" action="">
+     
+      <div class="mb-3">
         <label for="exampleInputEmail1" class="form-label">Nombre completo</label>
         <input name="nombre" class="form-control">
-<br>
+        <br>
         <div class="input-group">
-        <span class="input-group-text">Apellidos</span>
-        <input type="text" name="apellidopaterno" placeholder="paterno" aria-label="First name" class="form-control">
-        <input type="text" name="apellidomaterno" placeholder="materno" aria-label="Last name" class="form-control">
-      </div>
-      <br>
-      
+          <span class="input-group-text">Apellidos</span>
+          <input type="text" name="apellidopaterno" placeholder="paterno" aria-label="First name" class="form-control">
+          <input type="text" name="apellidomaterno" placeholder="materno" aria-label="Last name" class="form-control">
+        </div>
+        <br>
         <div class="mb-3">
-        <label for="exampleInputEmail1" class="form-label">Correo electronico</label>
-        <input type="email" name="correo" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
-      
+          <label for="exampleInputEmail1" class="form-label">Correo electrónico</label>
+          <input type="email" name="correo" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+        </div>
+        <div class="mb-3">
+          <label for="exampleInputPassword1" class="form-label">Contraseña</label>
+          <input type="password" name="password" placeholder="Mínimo 8 dígitos" class="form-control" id="exampleInputPassword1">
+        </div>
       </div>
       <div class="mb-3">
-        <label for="exampleInputPassword1" class="form-label">Contraseña</label>
-        <input type="password"  name="password" placeholder="Mínimo 8 digtos" class="form-control" id="exampleInputPassword1">
+        <label for="exampleInputPassword1" class="form-label">Confirmar contraseña</label>
+        <input type="password" name="confirm_password" class="form-control" id="exampleInputPassword1">
       </div>
-
-    </div>
-    <div class="mb-3">
-      <label for="exampleInputPassword1" class="form-label">Confirmar contraseña</label>
-      <input type="password"  name="confirm_password" class="form-control" id="exampleInputPassword1">
-    </div>
-    <center>
-      <button type="submit" class="btn btn-primary" value="Registrar">Confirmar</button>
+      <center>
+        <button type="submit" class="btn btn-primary" value="Registrar">Confirmar</button>
+      </center>
     </form>
-  </center>
 
-  
+    <?php if ($success): ?>
+      <!-- Ventana modal de éxito -->
+      <div class="modal fade" id="successModal" tabindex="-1" aria-labelledby="successModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="successModalLabel">Registro Exitoso</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              Registro exitoso! Ahora puedes <a href="login.php">iniciar sesión</a>.
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <?php elseif (!empty($error)): ?>
+        <div class="modal fade" id="errorModal" tabindex="-1" aria-labelledby="errorModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="errorModalLabel">Error en el Registro</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <?php echo $error; ?>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" onclick="resetForm()">Reintentar</button>
+            </div>
+        </div>
+    </div>
+</div>
+        
+<script>
+    var errorModal = new bootstrap.Modal(document.getElementById('errorModal'));
+    errorModal.show();
+
+    function resetForm() {
+        document.getElementById('registerForm').reset();
+    }
+</script>
+
+      
+      <script>
+        var successModal = new bootstrap.Modal(document.getElementById('successModal'));
+        successModal.show();
+      </script>
+    <?php endif; ?>
+
+  </body>
+</html>
