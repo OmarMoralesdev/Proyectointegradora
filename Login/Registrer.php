@@ -2,7 +2,7 @@
 // Datos de conexión a la base de datos
 require 'conexion.php';
 
-// Inicializaar variables de error y exit
+// Inicializar variables de error y éxito
 $error = '';
 $success = '';
 
@@ -15,7 +15,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $password = $_POST['password'];
     $confirm_password = $_POST['confirm_password'];
     $role = 'usuario'; // Valor predeterminado para los roles
-    
+    //xd
     // Validaciones básicas
     if (empty($nombre) || empty($apellidopaterno) || empty($apellidomaterno) || empty($correo) || empty($password) || empty($confirm_password)) {
         $error = "Todos los campos son obligatorios.";
@@ -151,7 +151,7 @@ $conn->close();
         <div style="flex: 0 1 70%"></div> 
         <button type="submit" class="btn btn-primary">Confirmar</button>
     </div>
-
+    
 </center>
             </form>
         </div>
@@ -207,6 +207,7 @@ $conn->close();
         function resetForm() {
             document.getElementById('registerForm').reset();
         }
+        
     </script>
 
 <?php endif; ?>
