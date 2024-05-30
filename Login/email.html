@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div class="container">
+    <h3>Enviar email desde Local con Xampp . </h3>
+    <form action="enviar.php" method="post">
+    <div class="mb-3">
+    <label for="email" class="form-label">Email</label>
+    <input type="email" name="email" class="form-control" id="email" required>
+    </div>|
+    <div class="mb-3">
+    <label for="nombre" class="form-label">Nombre</label>
+    <input type="text" name="nombre" class="form-control" id="nombre" required>
+    </div>
+    <div class="form-floating">
+    <textarea class="form-control" placeholder="Escriba su sugerencia aquí"
+    id="texto" name="texto" style="height: 100px"></textarea>
+    <label for="floatingTextarea2">Comentario</label>
+    </div>
+    <button type="submit" class="btn btn-success mt-3">Enviar</button>
+    </form>
+    </div>
+</body>
+</html>

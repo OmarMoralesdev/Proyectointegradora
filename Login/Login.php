@@ -1,8 +1,6 @@
 <?php
-// Incluir conexión a la base de datos
-require 'conexion.php';
 
-// Inicializar variable de error
+require 'conexion.php';
 $error = '';
 
 // Habilitar la visualización de errores para depuración
@@ -20,7 +18,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $error = "Todos los campos son obligatorios.";
     } else {
         // Preparar y ejecutar la consulta
-        $stmt = $conn->prepare("SELECT idusuario, contraseña, roles FROM USUARIOS WHERE correo = ?");
+        $stmt = $conn->prepare("SELECT id_usuario, contraseña, roles FROM USUARIOS WHERE correo = ?");
         if ($stmt === false) {
             die('Error en la preparación de la consulta: ' . htmlspecialchars($conn->error));
         }
@@ -30,14 +28,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $stmt->store_result();
 
         if ($stmt->num_rows > 0) {
-            $stmt->bind_result($idusuario, $hashed_password, $role);
+            $stmt->bind_result($id_usuario, $hashed_password, $role);
             $stmt->fetch();
 
             // Verificar contraseña
             if (password_verify($password, $hashed_password)) {
                 // Iniciar sesión del usuario
                 session_start();
-                $_SESSION['idusuario'] = $idusuario;
+                $_SESSION['id_usuario'] = $id_usuario;
                 $_SESSION['correo'] = $correo;
                 $_SESSION['role'] = $role;
 
@@ -126,8 +124,8 @@ $conn->close();
                 </div>
                 <button type="submit" class="my-form__button">Iniciar sesión</button>
                 <div class="my-form__actions">
-                    <a href="#" title="Restablecer contraseña">Restablecer contraseña</a>
-                    <a href="Registrer.php" title="Crear cuenta">¿Ya tienes una cuenta?</a>
+                    <a href="Reset_Password.php" title="Restablecer contraseña">Restablecer contraseña</a>
+                    <a href="Registrer.php" title="Crear cuenta">Crear una cuenta</a>
                 </div>
             </form>
         </div>

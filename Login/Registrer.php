@@ -6,26 +6,32 @@ require 'conexion.php';
 $error = '';
 $success = '';
 
+
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Recoger datos del formulario
     $nombre = trim($_POST['nombre']);
-    $apellidopaterno = trim($_POST['apellidopaterno']);
-    $apellidomaterno = trim($_POST['apellidomaterno']);
+    $apellido_paterno = trim($_POST['apellido_paterno']);
+    $apellido_materno = trim($_POST['apellido_materno']);
     $correo = trim($_POST['correo']);
     $password = $_POST['password'];
     $confirm_password = $_POST['confirm_password'];
     $role = 'usuario'; // Valor predeterminado para los roles
-    //xd
+
     // Validaciones básicas
-    if (empty($nombre) || empty($apellidopaterno) || empty($apellidomaterno) || empty($correo) || empty($password) || empty($confirm_password)) {
+    if (empty($nombre) || empty($apellido_paterno) || empty($apellido_materno) || empty($correo) || empty($password) || empty($confirm_password)) {
         $error = "Todos los campos son obligatorios.";
     } elseif (!filter_var($correo, FILTER_VALIDATE_EMAIL)) {
+
         $error = "Formato de correo inválido.";
     } elseif ($password !== $confirm_password) {
         $error = "Las contraseñas no coinciden.";
+    } elseif (!preg_match("/^[a-zA-ZáéíóÉÍÓÚñÑ\s]+$/", $nombre) || !preg_match("/^[a-zA-ZáéíóÉÍÓÚñÑ\s]+$/", $apellido_paterno) || !preg_match("/^[a-zA-ZáéíóÉÍÓÚñÑ\s]+$/", $apellido_materno)) {
+        $error = "El nombre y los apellidos solo deben contener letras.";
     } else {
+
+
         // Verificar si el correo ya existe
-        $stmt = $conn->prepare("SELECT idusuario FROM USUARIOS WHERE correo = ?");
+        $stmt = $conn->prepare("SELECT id_usuario FROM USUARIOS WHERE correo = ?");
         $stmt->bind_param("s", $correo);
         $stmt->execute();
         $stmt->store_result();
@@ -37,10 +43,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $hashed_password = password_hash($password, PASSWORD_DEFAULT);
             
             // Insertar nuevo usuario
-            $stmt = $conn->prepare("INSERT INTO USUARIOS (nombre, apellidopaterno, apellidomaterno, roles, correo, contraseña) VALUES (?, ?, ?, ?, ?, ?)");
-            $stmt->bind_param("ssssss", $nombre, $apellidopaterno, $apellidomaterno, $role, $correo, $hashed_password);
+            $stmt = $conn->prepare("INSERT INTO USUARIOS (nombre, apellido_paterno, apellido_materno, roles, correo, contraseña) VALUES (?, ?, ?, ?, ?, ?)");
+            $stmt->bind_param("ssssss", $nombre, $apellido_paterno, $apellido_materno, $role, $correo, $hashed_password);
             
             if ($stmt->execute()) {
+
                 $success = "Registro exitoso! Ahora puedes iniciar sesión.";
             } else {
                 $error = "Error al registrar el usuario: " . $stmt->error;
@@ -70,7 +77,7 @@ $conn->close();
         .form-container {
             max-width: 550px; /* Limitar el ancho máximo del formulario */
             margin: auto; /* Centrarr el formulario horizontalmente */
-            padding: 20px;
+            padding: 30px;
             background-color: white;
             border-radius: 20px;
             box-shadow: 0 0 100px rgba(0, 0, 0, 0.1);
@@ -78,60 +85,19 @@ $conn->close();
     </style>
 </head>
 <body class="p-3 m-0 border-0 bd-example m-0 border-0">
-    <nav class="navbar bg-transparent fixed-top">
-        <div class="container-fluid">
-            <a class="navbar-brand" href="#">Navbar</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasNavbar" aria-labelledby="offcanvasNavbarLabel">
-                <div class="offcanvas-header">
-                    <h5 class="offcanvas-title" id="offcanvasNavbarLabel">Offcanvas</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-                </div>
-                <div class="offcanvas-body">
-                    <ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
-                        <li class="nav-item">
-                            <a class="nav-link active" aria-current="page" href="#">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#">Link</a>
-                        </li>
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                Dropdown
-                            </a>
-                            <ul class="dropdown-menu">
-                                <li><a class="dropdown-item" href="#">Action</a></li>
-                                <li><a class="dropdown-item" href="#">Another action</a></li>
-                                <li>
-                                    <hr class="dropdown-divider">
-                                </li>
-                                <li><a class="dropdown-item" href="#">Something else here</a></li>
-                            </ul>
-                        </li>
-                    </ul>
-                    <form class="d-flex mt-3" role="search">
-                        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-                        <button class="btn btn-outline-success" type="submit">Search</button>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </nav>
-
     <div class="container mt-5 pt-5">
         <div class="form-container">
-            <form method="post" action="">
+            <form method="post" action="" onsubmit="return validarApellidos()">
                 <div class="mb-3">
                     <label for="nombre" class="form-label">Nombre completo</label>
                     <input type="text" name="nombre" class="form-control" id="nombre" required>
                 </div>
                 <div class="input-group mb-3">
                     <span class="input-group-text">Apellidos</span>
-                    <input type="text" name="apellidopaterno" placeholder="Paterno" aria-label="Paterno" class="form-control" required>
-                    <input type="text" name="apellidomaterno" placeholder="Materno" aria-label="Materno" class="form-control" required>
+                    <input type="text" name="apellido_paterno" placeholder="Paterno" aria-label="Paterno" class="form-control" required>
+                    <input type="text" name="apellido_materno" placeholder="Materno" aria-label="Materno" class="form-control" required>
                 </div>
+
                 <div class="mb-3">
                     <label for="correo" class="form-label">Correo electrónico</label>
                     <input type="email" name="correo" class="form-control" id="correo" aria-describedby="emailHelp" required>
@@ -206,11 +172,11 @@ $conn->close();
 
         function resetForm() {
             document.getElementById('registerForm').reset();
-        }
-        
+        } 
     </script>
 
 <?php endif; ?>
 
 </body>
+</html>
 </html>

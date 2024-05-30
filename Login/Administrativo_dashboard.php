@@ -1,7 +1,6 @@
 <?php
 session_start();
 
-
 // Verificar si el usuario ha iniciado sesión y es un ususario
 if (!isset($_SESSION['correo']) || $_SESSION['role'] !== 'administrador') {
     header("Location: login.php");
