@@ -1,13 +1,14 @@
-create database login2;
-use login2;
--- Crear la tabla de usuarios
-CREATE TABLE USUARIOS (
-    idusuario INT AUTO_INCREMENT PRIMARY KEY,
+create database Taller_EuroService;
+-- drop database taller_euroservice;
+use Taller_EuroService;
+
+create table USUARIOS(
+    id_usuario INT AUTO_INCREMENT PRIMARY KEY,
     nombre VARCHAR(50) NOT NULL,
-    apellidopaterno VARCHAR(50) NOT NULL,
-    apellidomaterno VARCHAR(50) NOT NULL,
+    apellido_paterno VARCHAR(50) NOT NULL,
+    apellido_materno VARCHAR(50) NOT NULL,
     roles ENUM('usuario', 'administrador') NOT NULL,
     correo VARCHAR(100) NOT NULL UNIQUE,
-    contraseña VARCHAR(255) NOT NULL,
+    contraseña VARCHAR(90) NOT NULL,
     fechalogin TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);
+); 
