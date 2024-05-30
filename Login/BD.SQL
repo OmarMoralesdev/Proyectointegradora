@@ -1,5 +1,5 @@
 create database Taller_EuroService;
--- drop database taller_euroservice;
+-- drop database taller_euroservic;
 use Taller_EuroService;
 
 create table USUARIOS(
